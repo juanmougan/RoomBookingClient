@@ -24,9 +24,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -120,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "RoomBookingClient"
+  "defaultProject": "RoomBookingClient",
+  "cli": {
+    "analytics": "37fe223e-c4d2-452c-b443-d93d3e63ae38"
+  }
 }
