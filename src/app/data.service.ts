@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { Layout, LayoutCapacity, Room } from './model/Room';
 import { User } from './model/User';
-// import { User } from './model/User';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  // private rooms: Array<Room>;
-  rooms: Array<Room>;
-  users: Array<User>;
-  // private users: Array<User>;
+  private rooms: Array<Room>;
+  private users: Array<User>;
+
+  getRooms() : Observable<Array<Room>> {
+    return of(this.rooms);  // Linter warning is wrong? https://github.com/ReactiveX/rxjs/issues/4723
+  }
+
+  getUsers() : Observable<Array<User>> {
+    return of(this.users);
+  }
 
   constructor() {
     this.rooms = new Array<Room>();
