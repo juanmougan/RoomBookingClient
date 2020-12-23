@@ -34,5 +34,6 @@
   </div>
   
   <!-- [] is for HTML attribute binding -->
-  <button type="button" class="btn btn-primary" (click)="onSubmit()" [disabled]="userForm.invalid || !nameIsValid">Save</button>
+  <button type="button" class="btn btn-primary" (click)="onSubmit()" 
+    [disabled]="user.id ? !nameIsValid : userForm.invalid || !nameIsValid || !passwordIsValid || !passwordAgainIsValid || !passwordsMatch()">Save</button>
 </form>

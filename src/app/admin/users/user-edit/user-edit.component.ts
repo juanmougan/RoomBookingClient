@@ -30,6 +30,8 @@ export class UserEditComponent implements OnInit {
   ngOnInit(): void {
     this.formUser = Object.assign({}, this.user);   // deep copies
     this.checkIfNameIsValid();
+    this.checkIfPasswordIsValid();
+    this.checkIfPasswordAgainIsValid();
   }
 
   onSubmit() {
