@@ -18,12 +18,18 @@ export class UserEditComponent implements OnInit {
   message: string;
 
   password: string;
+  passwordAgain: string;
+
+  nameIsValid = false;
+  passwordIsValid = false;
+  passwordAgainIsValid = false;
 
   constructor(private dataService: DataService, 
               private router: Router) { }
 
   ngOnInit(): void {
     this.formUser = Object.assign({}, this.user);   // deep copies
+    this.checkIfNameIsValid();
   }
 
   onSubmit() {
@@ -43,4 +49,23 @@ export class UserEditComponent implements OnInit {
     }
   }
 
+  checkIfNameIsValid() {
+    this.nameIsValid = this.inputIsNotBlank(this.formUser.name);
+  }
+
+  checkIfPasswordIsValid() {
+    this.passwordIsValid = this.inputIsNotBlank(this.password);
+  }
+
+  checkIfPasswordAgainIsValid() {
+    this.passwordAgainIsValid = this.inputIsNotBlank(this.passwordAgain);
+  }
+
+  inputIsNotBlank(input: string) {
+    return !!input?.trim()
+  }
+
+  passwordsMatch() {
+    return this.password === this.passwordAgain;
+  }
 }
