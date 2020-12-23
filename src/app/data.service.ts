@@ -19,6 +19,24 @@ export class DataService {
     return of(this.users);
   }
 
+  addUser(user: User, password: string): Observable<User> {
+    user.id = this.nextId();
+    this.users.push(user);
+    return of(user);
+  }
+
+  nextId(): number {
+    const ids = Array<number>();
+    this.users.forEach(e => ids.push(e.id));
+    return Math.max(...ids) + 1;
+  }
+
+  updateUser(user: User): Observable<User> {
+    const originalUser = this.users.find( u => u.id === user.id );
+    originalUser.name = user.name;
+    return of(originalUser);
+  }
+
   constructor() {
     this.rooms = new Array<Room>();
     const room1 = new Room();

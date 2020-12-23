@@ -12,6 +12,7 @@ export class UsersComponent implements OnInit {
 
   users: Array<User>;
   selectedUser: User;
+  action: string;     // Why not an enum?
 
   constructor(private dataService: DataService,
               private router: Router,
@@ -26,6 +27,7 @@ export class UsersComponent implements OnInit {
     this.route.queryParams.subscribe(
       (params) => {
         const id = params['id'];
+        this.action = params['action'];
         if(id) {
           this.selectedUser = this.users.find( r => {
             return r.id === +id;  // The '+' is a hack to convert String to Number
@@ -37,7 +39,12 @@ export class UsersComponent implements OnInit {
 
   setUser(id: number) {
     // The queryParams are provided as an object
-    this.router.navigate(['admin', 'users'], { queryParams: { id } }); // Same as "id: id"
+    this.router.navigate(['admin', 'users'], { queryParams: { id, action: 'view' } }); // Same as "id: id"
+  }
+
+  addUser() {
+    this.selectedUser = new User();
+    this.router.navigate(['admin', 'users'], { queryParams: { action: 'add' } });
   }
 
 }
