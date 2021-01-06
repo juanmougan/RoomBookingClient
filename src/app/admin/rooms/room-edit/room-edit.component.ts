@@ -1,7 +1,9 @@
 import { Layout, LayoutCapacity } from './../../../model/Room';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Room } from 'src/app/model/Room';
+import { DataService } from 'src/app/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-room-edit',
@@ -15,23 +17,26 @@ export class RoomEditComponent implements OnInit {
   layouts = Object.keys(Layout);
   layoutEnum = Layout; // To use the enum in the HTML
 
-  roomForm = new FormGroup({
-    roomName: new FormControl('roomName'),
-    location: new FormControl('location'),
-  });
+  roomForm: FormGroup;
 
-  constructor() {}
+  constructor(private formBuilder: FormBuilder,
+              private dataService: DataService,
+              private router: Router) {}
 
-  ngOnInit(): void {
-    this.roomForm.patchValue({
-      roomName: this.room.name,
-      location: this.room.location,
-    });
+  ngOnInit() {
+    this.roomForm = this.formBuilder.group(
+      { 
+        roomName : [this.room.name, Validators.required],
+        location : [this.room.location, [Validators.required, Validators.minLength(2)]]
+      }
+    );
 
     for (const layout of this.layouts) {
+      const layoutCapacity = this.room.capacities.find( lc => lc.layout === Layout[layout] );
+      const initialCapacity = layoutCapacity?.capacity;
       this.roomForm.addControl(
         `layout${layout}`,
-        new FormControl(`layout${layout}`)
+        this.formBuilder.control(initialCapacity)
       );
     }
   }
@@ -43,10 +48,23 @@ export class RoomEditComponent implements OnInit {
     for (const layout of this.layouts) {
       const layoutCapacity = new LayoutCapacity();
       layoutCapacity.layout = Layout[layout];
-      layoutCapacity.capacity = this.roomForm.value[`layout${layout}`];
+      layoutCapacity.capacity = this.roomForm.controls[`layout${layout}`].value;
       this.room.capacities.push(layoutCapacity);
-      // TODO add a save method on the dataservice
-      console.log(this.room);
+      
+      if(this.room.id == null) {
+        this.dataService.addRoom(this.room).subscribe(
+          next => {
+            this.router.navigate(['admin', 'rooms'], { queryParams : { action : 'view', id : next.id } });
+          }
+        );
+      } else {
+        this.dataService.updateRoom(this.room).subscribe(
+          // TODO maybe I can extract this lambda to avoid duplication
+          next => {
+            this.router.navigate(['admin', 'rooms'], { queryParams : { action : 'view', id : next.id } });
+          }
+        );
+      }
     }
   }
 }

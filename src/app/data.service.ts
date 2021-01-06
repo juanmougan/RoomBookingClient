@@ -20,14 +20,14 @@ export class DataService {
   }
 
   addUser(user: User, password: string): Observable<User> {
-    user.id = this.nextId();
+    user.id = this.nextId(this.users);
     this.users.push(user);
     return of(user);
   }
 
-  nextId(): number {
+  nextId(collection: Array<any>): number {
     const ids = Array<number>();
-    this.users.forEach(e => ids.push(e.id));
+    collection.forEach(e => ids.push(e.id));
     return Math.max(...ids) + 1;
   }
 
@@ -35,6 +35,20 @@ export class DataService {
     const originalUser = this.users.find( u => u.id === user.id );
     originalUser.name = user.name;
     return of(originalUser);
+  }
+
+  updateRoom(room: Room): Observable<Room> {
+    const originalRoom = this.rooms.find( r => r.id === room.id );
+    originalRoom.name = room.name;
+    originalRoom.location = room.location;
+    originalRoom.capacities = room.capacities;
+    return of(originalRoom);
+  }
+
+  addRoom(room: Room): Observable<Room> {
+    room.id = this.nextId(this.rooms);
+    this.rooms.push(room);
+    return of(room);
   }
 
   constructor() {
