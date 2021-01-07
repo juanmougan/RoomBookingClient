@@ -38,11 +38,39 @@ export class DataService {
   }
 
   updateRoom(room: Room): Observable<Room> {
-    const originalRoom = this.rooms.find( r => r.id === room.id );
+    const originalRoom = this.findRoomById(room);
     originalRoom.name = room.name;
     originalRoom.location = room.location;
     originalRoom.capacities = room.capacities;
     return of(originalRoom);
+  }
+
+  findRoomById(id: number) {
+    return this.rooms.find( r => r.id === id );
+  }
+
+  deleteRoom(id: number): Observable<any> {
+    const room = this.findRoomById(id);
+    const roomIndex = this.rooms.indexOf(room);
+    this.rooms.splice(roomIndex, 1);
+    return of(null);
+  }
+
+  // TODO this could be renamed using Generics, and an Interface that has a getId()
+  // But I need to learn how to do that in TypeScript :)
+  findUserById(id: number) {
+    return this.users.find( r => r.id === id );
+  }
+
+  deleteUser(id: number): Observable<any> {
+    const user = this.findUserById(id);
+    const userIndex = this.users.indexOf(user);
+    this.users.splice(userIndex, 1);
+    return of(null);
+  }
+
+  resetUserPassword(id: number): Observable<any> {
+    return of(null);
   }
 
   addRoom(room: Room): Observable<Room> {
