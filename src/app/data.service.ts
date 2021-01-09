@@ -59,14 +59,12 @@ export class DataService {
     return of(null);
   }
 
-  // TODO this could be renamed using Generics, and an Interface that has a getId()
-  // But I need to learn how to do that in TypeScript :)
-  findUserById(id: number) {
-    return this.users.find( r => r.id === id );
+  findElementById(id: number, collection: Array<any>) {
+    return collection.find( e => e.id === id );
   }
 
   deleteUser(id: number): Observable<any> {
-    const user = this.findUserById(id);
+    const user = this.findElementById(id, this.users);
     const userIndex = this.users.indexOf(user);
     this.users.splice(userIndex, 1);
     return of(null);
@@ -92,6 +90,32 @@ export class DataService {
 
   getBooking(id: number) : Observable<Booking> {
     return of(this.bookings.find(b => b.id === id));
+  }
+
+  addBooking(booking: Booking) {
+    booking.id = this.nextId(this.bookings);
+    this.bookings.push(booking);
+    return of(booking);
+  }
+
+  updateBooking(booking: Booking): Observable<Booking> {
+    const originalBooking = this.findElementById(booking.id, this.bookings);
+    originalBooking.room = booking.room;
+    originalBooking.user = booking.user;
+    originalBooking.layout = booking.layout;
+    originalBooking.title = booking.title;
+    originalBooking.date = booking.date;
+    originalBooking.startTime = booking.startTime;
+    originalBooking.startTime = booking.startTime;
+    originalBooking.participants = booking.participants;
+    return of(originalBooking);
+  }
+
+  deleteBooking(id: number): Observable<any> {
+    const booking = this.findElementById(id, this.bookings);
+    const bookingIndex = this.bookings.indexOf(booking);
+    this.bookings.splice(bookingIndex, 1);
+    return of(null);
   }
 
   constructor() {
