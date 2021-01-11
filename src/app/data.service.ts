@@ -80,12 +80,12 @@ export class DataService {
     return of(room);
   }
 
-  // getBookings(date: string) : Observable<Array<Booking>> {
-  //   return of(this.bookings.filter(b => b.date === date));
-  // }
-
-  getBookings() : Observable<Array<Booking>> {
+  getAllBookings() : Observable<Array<Booking>> {
     return of(this.bookings);
+  }
+
+  getBookings(date: string) : Observable<Array<Booking>> {
+    return of(this.bookings.filter(b => b.date === date));
   }
 
   getBooking(id: number) : Observable<Booking> {

@@ -2,9 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 // For Locales
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeEsAr from '@angular/common/locales/es-AR';
-registerLocaleData(localeEsAr);
+
+// This would convert to Argentina's date format
+// import { registerLocaleData } from '@angular/common';
+// import localeEsAr from '@angular/common/locales/es-AR';
+// registerLocaleData(localeEsAr);
 
 
 import { AppComponent } from './app.component';
@@ -52,7 +54,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'es-AR'},
+    // This would convert to Argentina's date format
+    // { provide: LOCALE_ID, useValue: 'es-AR'},
   ],
   bootstrap: [AppComponent],
 })
