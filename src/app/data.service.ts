@@ -5,18 +5,38 @@ import { Layout, LayoutCapacity, Room } from './model/Room';
 import { User } from './model/User';
 import {formatDate} from '@angular/common';
 import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  getRooms() : Observable<Array<Room>> {
-    return of(null);  // Linter warning is wrong? https://github.com/ReactiveX/rxjs/issues/4723
-  }
+  private API_URL = `${environment.restUrl}/api`;
+  private USERS_URL = `${this.API_URL}/users`;
+  private ROOMS_URL = `${this.API_URL}/rooms`;
 
   getUsers() : Observable<Array<User>> {
-    return of(null);
+    return this.http.get<Array<User>>(`${this.USERS_URL}`)
+      .pipe(
+        map(
+          data => {
+            return User.fromJsonList(data)
+          }
+        )
+      );
+  }
+
+  getRooms() : Observable<Array<Room>> {
+    return this.http.get<Array<Room>>(`${this.ROOMS_URL}`)
+      .pipe(
+        map(
+          data => {
+            return Room.fromJsonList(data)
+          }
+        )
+      );
   }
 
   addUser(user: User, password: string): Observable<User> {
@@ -85,7 +105,18 @@ export class DataService {
     return of(null);
   }
 
-  constructor() {
+  constructor(private http: HttpClient) {
     console.log(`API URL: ${environment.restUrl}`);
+  }
+
+  // TODO delete
+  getUser(id: number): Observable<User> {
+    console.log(`Get user with id: ${id} from URL: ${this.USERS_URL}`);
+    return this.http.get<User>(`${this.USERS_URL}/${id}`)
+      .pipe(map(
+        data => {
+          return User.fromJson(data)
+        }
+      ));
   }
 }

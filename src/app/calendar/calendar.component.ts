@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { Booking } from '../model/Booking';
+import { User } from '../model/User';
 
 @Component({
   selector: 'app-calendar',
@@ -22,6 +23,12 @@ export class CalendarComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    // TODO delete
+    this.dataService.getUser(13).subscribe((u) => {
+      console.log(u);
+    });
+
     this.route.queryParams.subscribe(
       params => {
         this.selectedDate = params['date']
