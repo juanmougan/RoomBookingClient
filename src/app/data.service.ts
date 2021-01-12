@@ -108,15 +108,4 @@ export class DataService {
   constructor(private http: HttpClient) {
     console.log(`API URL: ${environment.restUrl}`);
   }
-
-  // TODO delete
-  getUser(id: number): Observable<User> {
-    console.log(`Get user with id: ${id} from URL: ${this.USERS_URL}`);
-    return this.http.get<User>(`${this.USERS_URL}/${id}`)
-      .pipe(map(
-        data => {
-          return User.fromJson(data)
-        }
-      ));
-  }
 }

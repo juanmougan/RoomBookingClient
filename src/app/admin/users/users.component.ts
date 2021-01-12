@@ -19,13 +19,17 @@ export class UsersComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private formResetService: FormResetService) { }
-
-  ngOnInit(): void {
+  
+  loadData() {
     this.dataService.getUsers().subscribe(
       (next) => {
         this.users = next;
+        this.processUrlParams();
       }
     );
+  }
+
+  processUrlParams() {
     this.route.queryParams.subscribe(
       (params) => {
         const id = params['id'];
@@ -37,6 +41,10 @@ export class UsersComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.loadData();
   }
 
   setUser(id: number) {
